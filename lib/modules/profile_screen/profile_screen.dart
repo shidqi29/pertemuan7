@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,18 +13,22 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool isVisiblePassword = false;
+
   @override
   void initState() {
     if (widget.user.name != "") {
-      nameController.text = widget.user.name;
+      _nameController.text = widget.user.name;
     }
     super.initState();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -38,6 +40,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             height: MediaQuery.of(context).padding.top,
           ),
+          const SizedBox(
+            height: 16,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    GoRouter.of(context).pop();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(200),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: const Icon(Icons.chevron_left_rounded),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                const Text(
+                  "Profile Detail",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
           Expanded(
               child: Form(
             key: _formKey,
@@ -48,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     horizontal: 16,
                   ),
                   child: TextFormField(
-                    controller: nameController,
+                    controller: _nameController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
@@ -65,8 +104,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     validator: (value) {
-                      if (value == "") {
+                      if (value == "" || value == null) {
                         return "Nama Wajib diisi";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    obscureText: !isVisiblePassword,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isVisiblePassword = !isVisiblePassword;
+                          });
+                        },
+                        icon: Icon(
+                          isVisiblePassword == false
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                        ),
+                      ),
+                      label: const Text("Password"),
+                      isDense: true,
+                      fillColor: Colors.blue[100],
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    validator: (value) {
+                      if (value == "" || value == null) {
+                        return "Password Wajib diisi";
                       }
                       return null;
                     },
