@@ -6,6 +6,8 @@ import 'package:pertemuan_v/modules/home_screen/fragments/home_fragment/home_fra
 import 'package:pertemuan_v/modules/home_screen/fragments/menu_fragment/menu_fragment.dart';
 import 'package:pertemuan_v/modules/home_screen/fragments/news_fragment/news_fragment.dart';
 
+import '../../models/news.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController _pageController = PageController();
   late User user;
+  late News news;
 
   tapBottomItem(int index) {
     if (index != 2) {
@@ -49,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _pageController.addListener(() {});
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
